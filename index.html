@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Upcoming Events</h2>
+    {% if events %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event[1] }}</td>
+                    <td>{{ event[3] }}</td>
+                    <td>{{ event[4] }}</td>
+                    <td>
+                        <a href="{{ url_for('event_detail', event_id=event[0]) }}" class="button">View Details</a>
+                        {% if session.user_id %}
+                            <a href="{{ url_for('register', event_id=event[0]) }}" class="button">Register</a>
+                            <a href="{{ url_for('manage', event_id=event[0]) }}" class="button">Manage</a>
+                            {% if session.role == 'admin' and event[5] == session.user_id %}
+                                <a href="{{ url_for('delete_event', event_id=event[0]) }}" class="button delete">Delete Event</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="button">Login to Register</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('index', page=page-1) }}">&laquo; Previous</a>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) %}
+                <a href="{{ url_for('index', page=p) }}" class="{% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+            {% if page < total_pages %}
+                <a href="{{ url_for('index', page=page+1) }}">Next &raquo;</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No events available.</p>
+    {% endif %}
+{% endblock %}

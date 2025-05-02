@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Welcome, {{ session.user_name }}!</h2>
+    <h3>Your Registered Events</h3>
+    {% if user_events %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+            </tr>
+            {% for event in user_events %}
+                <tr>
+                    <td>{{ event[1] }}</td>
+                    <td>{{ event[2] }}</td>
+                    <td>{{ event[3] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You are not registered for any events.</p>
+    {% endif %}
+    {% if session.role == 'admin' %}
+        <h3>Events You Created</h3>
+        {% if created_events %}
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+                {% for event in created_events %}
+                    <tr>
+                        <td>{{ event[1] }}</td>
+                        <td>{{ event[3] }}</td>
+                        <td>{{ event[4] }}</td>
+                        <td>
+                            <a href="{{ url_for('event_detail', event_id=event[0]) }}" class="button">View</a>
+                            <a href="{{ url_for('delete_event', event_id=event[0]) }}" class="button delete">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>You have not created any events.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

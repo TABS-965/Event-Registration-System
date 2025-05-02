@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>{{ event[1] }}</h2>
+    <p><strong>Description:</strong> {{ event[2] or 'No description available.' }}</p>
+    <p><strong>Date:</strong> {{ event[3] }}</p>
+    <p><strong>Location:</strong> {{ event[4] }}</p>
+    <p><strong>Created by:</strong> {% if event[5] == session.user_id %}You{% else %}Admin{% endif %}</p>
+    <h3>Registered Users</h3>
+    {% if registrations %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registered By</th>
+            </tr>
+            {% for reg in registrations %}
+                <tr>
+                    <td>{{ reg[0] }}</td>
+                    <td>{{ reg[1] }}</td>
+                    <td>{{ reg[2] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No registrations yet.</p>
+    {% endif %}
+    {% if session.user_id %}
+        <a href="{{ url_for('register', event_id=event[0]) }}" class="button">Register for this Event</a>
+        <a href="{{ url_for('manage', event_id=event[0]) }}" class="button">Manage Registrations</a>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="button">Login to Register</a>
+    {% endif %}
+{% endblock %}
