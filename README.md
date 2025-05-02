@@ -1,1 +1,1 @@
-# Event-Registration-System
+# Event-Registration-System/CodeAlpha
